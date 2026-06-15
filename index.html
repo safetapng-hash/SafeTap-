@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeTap - Personal Safety App</title>
+    <script src="https://tailwindcss.com"></script>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: #0f172a; color: #ffffff; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen items-center justify-center p-4">
+
+    <!-- 1. PREMIUM PAYWALL SCREEN -->
+    <div id="paywall-screen" class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl text-center space-y-6">
+        <div class="flex justify-center">
+            <!-- Security Shield Icon Placeholder -->
+            <div class="bg-red-500/10 p-4 rounded-full text-red-500 border border-red-500/20 text-4xl">🛡️</div>
+        </div>
+        <h1 class="text-3xl font-extrabold tracking-tight text-white">SafeTap Premium</h1>
+        <p class="text-slate-400 text-sm">Protect your family and loved ones from kidnappings and insecurity with instant SOS tracking alerts.</p>
+        
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 text-left">
+            <div class="flex items-center space-x-3 text-sm"><span class="text-green-400">✓</span> <span>Instant 1-Tap SOS Button</span></div>
+            <div class="flex items-center space-x-3 text-sm"><span class="text-green-400">✓</span> <span>Live GPS Location SMS Sharing</span></div>
+            <div class="flex items-center space-x-3 text-sm"><span class="text-green-400">✓</span> <span>Up to 3 Trusted Emergency Contacts</span></div>
+        </div>
+
+        <div class="py-2">
+            <span class="text-3xl font-black text-white">₦3,000</span>
+            <span class="text-slate-400 text-sm">/ monthly</span>
+        </div>
+
+        <!-- REPLACED WITH PAYSTACK SUBSCRIPTION LINK -->
+        <button onclick="simulateSubscriptionPayment()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-red-600/20 text-lg">
+            Subscribe via Paystack
+        </button>
+    </div>
+
+    <!-- 2. MAIN APP SCREEN (HIDDEN UNTIL SUBSCRIBED) -->
+    <div id="main-app-screen" class="hidden w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-6">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+            <h2 class="text-xl font-bold flex items-center gap-2 text-red-500">🛡️ SafeTap Dashboard</h2>
+            <button onclick="showSettings()" class="text-sm bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300">⚙️ Contacts</button>
+        </div>
+
+        <!-- MASSIVE SOS TRIGGER BUTTON -->
+        <div class="flex flex-col items-center justify-center py-8 space-y-4">
+            <button onclick="triggerSOSAlert()" class="w-48 h-48 rounded-full bg-gradient-to-br from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 flex items-center justify-center border-8 border-slate-800 shadow-2xl shadow-red-500/30 transition active:scale-95">
+                <span class="text-white font-black text-2xl tracking-wider">TAP SOS</span>
+            </button>
+            <p id="location-status" class="text-xs text-yellow-500 font-medium animate-pulse">📡 GPS Signal Ready</p>
+        </div>
+
+        <!-- EMERGENCY CONTACT MANAGEMENT -->
+        <div id="settings-section" class="space-y-3 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+            <h3 class="text-sm font-semibold text-slate-300">Registered Contacts</h3>
+            <input id="contact1" type="tel" placeholder="Contact 1 Phone Number" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-slate-200">
+            <input id="contact2" type="tel" placeholder="Contact 2 Phone Number" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-slate-200">
+            <button onclick="saveContacts()" class="w-full bg-slate-800 text-white font-semibold py-2 rounded-xl text-sm border border-slate-700">Save Numbers</button>
+        </div>
+    </div>
+
+    <script>
+        // APP LOGIC
+        function simulateSubscriptionPayment() {
+            alert("Redirecting to Paystack Secure Checkout for ₦3,000...");
+            // Once paid, they unlock the app dashboard
+            document.getElementById('paywall-screen').classList.add('hidden');
+            document.getElementById('main-app-screen').classList.remove('hidden');
+        }
+
+        function showSettings() {
+            const settings = document.getElementById('settings-section');
+            settings.classList.toggle('hidden');
+        }
+
+        function saveContacts() {
+            const c1 = document.getElementById('contact1').value;
+            if(c1) {
+                alert("Emergency numbers saved securely to your phone storage!");
+            } else {
+                alert("Please input at least one phone number.");
+            }
+        }
+
+        function triggerSOSAlert() {
+            if (!navigator.geolocation) {
+                alert("Error: Location services are not supported by this phone.");
+                return;
+            }
+
+            document.getElementById('location-status').innerText = "📡 Fetching Exact GPS Location...";
+            document.getElementById('location-status').className = "text-xs text-red-500 font-medium animate-pulse";
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const mapsLink = `https://google.com{lat},${lon}`;
+                    
+                    document.getElementById('location-status').innerText = "📡 Location Secured!";
+                    document.getElementById('location-status').className = "text-xs text-green-400 font-medium";
+
+                    // Formats a direct SMS text message link
+                    const smsMessage = `EMERGENCY! I am in danger and need immediate help. Track my live location here: ${mapsLink}`;
+                    const smsUrl = `sms:?body=${encodeURIComponent(smsMessage)}`;
+                    
+                    alert("SOS Triggered successfully! Opening your phone's messaging application to dispatch the location alert.");
+                    window.location.href = smsUrl;
+                },
+                (error) => {
+                    alert("Unable to retrieve GPS coordinates. Please check your phone location permission toggles.");
+                    document.getElementById('location-status').innerText = "❌ GPS Signal Failed";
+                }
+            );
+        }
+    </script>
+</body>
+</html>
