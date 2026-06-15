@@ -4,79 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SafeTap - Personal Safety App</title>
-    <script src="https://tailwindcss.com"></script>
     <style>
-        body { font-family: system-ui, -apple-system, sans-serif; background-color: #0f172a; color: #ffffff; }
+        body { font-family: sans-serif; background-color: #0f172a; color: #ffffff; padding: 20px; text-align: center; }
+        .card { background-color: #1e293b; border-radius: 20px; padding: 25px; margin: 10px auto; max-width: 400px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .btn-premium { background-color: #dc2626; color: white; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 12px; width: 100%; cursor: pointer; margin-top: 15px; }
+        .btn-sos { background-color: #ef4444; color: white; border: 8px solid #334155; width: 180px; height: 180px; border-radius: 90px; font-size: 24px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(239,68,68,0.4); margin: 20px auto; display: block; }
+        .input-field { width: 90%; background-color: #0f172a; border: 1px solid #475569; border-radius: 10px; padding: 12px; margin: 8px 0; color: white; font-size: 14px; }
+        .btn-save { background-color: #475569; color: white; border: none; padding: 10px; width: 95%; border-radius: 10px; font-weight: bold; margin-top: 5px; cursor: pointer; }
+        .badge { background-color: rgba(220,38,38,0.1); border: 1px solid rgba(220,38,38,0.2); padding: 15px; border-radius: 50%; display: inline-block; font-size: 30px; }
+        ul { text-align: left; padding-left: 10px; list-style-type: none; }
+        li { margin: 10px 0; font-size: 14px; color: #cbd5e1; }
+        .price { font-size: 28px; font-weight: 900; margin: 15px 0; color: white; }
+        .hidden { display: none !important; }
+        .status { font-size: 13px; color: #eab308; font-weight: bold; }
     </style>
 </head>
-<body class="flex flex-col min-h-screen items-center justify-center p-4">
+<body>
 
     <!-- 1. PREMIUM PAYWALL SCREEN -->
-    <div id="paywall-screen" class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl text-center space-y-6">
-        <div class="flex justify-center">
-            <!-- Security Shield Icon Placeholder -->
-            <div class="bg-red-500/10 p-4 rounded-full text-red-500 border border-red-500/20 text-4xl">🛡️</div>
-        </div>
-        <h1 class="text-3xl font-extrabold tracking-tight text-white">SafeTap Premium</h1>
-        <p class="text-slate-400 text-sm">Protect your family and loved ones from kidnappings and insecurity with instant SOS tracking alerts.</p>
+    <div id="paywall-screen" class="card">
+        <div class="badge">🛡️</div>
+        <h1 style="font-size: 28px; margin: 10px 0 5px 0;">SafeTap Premium</h1>
+        <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Protect your family and loved ones from kidnappings and insecurity with instant SOS tracking alerts.</p>
         
-        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 text-left">
-            <div class="flex items-center space-x-3 text-sm"><span class="text-green-400">✓</span> <span>Instant 1-Tap SOS Button</span></div>
-            <div class="flex items-center space-x-3 text-sm"><span class="text-green-400">✓</span> <span>Live GPS Location SMS Sharing</span></div>
-            <div class="flex items-center space-x-3 text-sm"><span class="text-green-400">✓</span> <span>Up to 3 Trusted Emergency Contacts</span></div>
-        </div>
+        <ul>
+            <li><span style="color: #4ade80;">✓</span> Instant 1-Tap SOS Button</li>
+            <li><span style="color: #4ade80;">✓</span> Live GPS Location SMS Sharing</li>
+            <li><span style="color: #4ade80;">✓</span> Up to 3 Trusted Emergency Contacts</li>
+        </ul>
 
-        <div class="py-2">
-            <span class="text-3xl font-black text-white">₦3,000</span>
-            <span class="text-slate-400 text-sm">/ monthly</span>
-        </div>
+        <div class="price">₦3,000 <span style="font-size: 14px; color: #94a3b8; font-weight: normal;">/ monthly</span></div>
 
-        <!-- REPLACED WITH PAYSTACK SUBSCRIPTION LINK -->
-        <button onclick="simulateSubscriptionPayment()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-red-600/20 text-lg">
-            Subscribe via Paystack
-        </button>
+        <button onclick="activateAppDashboard()" class="btn-premium">Subscribe via Paystack</button>
     </div>
 
-    <!-- 2. MAIN APP SCREEN (HIDDEN UNTIL SUBSCRIBED) -->
-    <div id="main-app-screen" class="hidden w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-6">
-        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-            <h2 class="text-xl font-bold flex items-center gap-2 text-red-500">🛡️ SafeTap Dashboard</h2>
-            <button onclick="showSettings()" class="text-sm bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300">⚙️ Contacts</button>
-        </div>
-
+    <!-- 2. MAIN APP SCREEN (HIDDEN BY DEFAULT UNTIL SUBSCRIBED) -->
+    <div id="main-app-screen" class="card hidden">
+        <h2 style="color: #ef4444; margin-top: 0;">🛡️ SafeTap Dashboard</h2>
+        
         <!-- MASSIVE SOS TRIGGER BUTTON -->
-        <div class="flex flex-col items-center justify-center py-8 space-y-4">
-            <button onclick="triggerSOSAlert()" class="w-48 h-48 rounded-full bg-gradient-to-br from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 flex items-center justify-center border-8 border-slate-800 shadow-2xl shadow-red-500/30 transition active:scale-95">
-                <span class="text-white font-black text-2xl tracking-wider">TAP SOS</span>
-            </button>
-            <p id="location-status" class="text-xs text-yellow-500 font-medium animate-pulse">📡 GPS Signal Ready</p>
-        </div>
+        <button onclick="triggerSOSAlert()" class="btn-sos">TAP SOS</button>
+        <p id="location-status" class="status">📡 GPS Signal Ready</p>
 
         <!-- EMERGENCY CONTACT MANAGEMENT -->
-        <div id="settings-section" class="space-y-3 bg-slate-950 p-4 rounded-2xl border border-slate-800">
-            <h3 class="text-sm font-semibold text-slate-300">Registered Contacts</h3>
-            <input id="contact1" type="tel" placeholder="Contact 1 Phone Number" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-slate-200">
-            <input id="contact2" type="tel" placeholder="Contact 2 Phone Number" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-slate-200">
-            <button onclick="saveContacts()" class="w-full bg-slate-800 text-white font-semibold py-2 rounded-xl text-sm border border-slate-700">Save Numbers</button>
+        <div style="background-color: #0f172a; padding: 15px; border-radius: 15px; margin-top: 20px; text-align: left;">
+            <h3 style="font-size: 14px; margin: 0 0 10px 0; color: #94a3b8;">Registered Contacts</h3>
+            <input id="contact1" type="tel" placeholder="Contact 1 Phone Number" class="input-field">
+            <input id="contact2" type="tel" placeholder="Contact 2 Phone Number" class="input-field">
+            <button onclick="saveContacts()" class="btn-save">Save Numbers</button>
         </div>
     </div>
 
     <script>
-        // APP LOGIC
-        function simulateSubscriptionPayment() {
+        function activateAppDashboard() {
             alert("Redirecting to Paystack Secure Checkout for ₦3,000...");
-            // Once paid, they unlock the app dashboard
             document.getElementById('paywall-screen').classList.add('hidden');
             document.getElementById('main-app-screen').classList.remove('hidden');
         }
 
-        function showSettings() {
-            const settings = document.getElementById('settings-section');
-            settings.classList.toggle('hidden');
-        }
-
         function saveContacts() {
-            const c1 = document.getElementById('contact1').value;
+            var c1 = document.getElementById('contact1').value;
             if(c1) {
                 alert("Emergency numbers saved securely to your phone storage!");
             } else {
@@ -91,26 +78,25 @@
             }
 
             document.getElementById('location-status').innerText = "📡 Fetching Exact GPS Location...";
-            document.getElementById('location-status').className = "text-xs text-red-500 font-medium animate-pulse";
+            document.getElementById('location-status').style.color = "#ef4444";
 
             navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-                    const mapsLink = `https://google.com{lat},${lon}`;
+                function(position) {
+                    var lat = position.coords.latitude;
+                    var lon = position.coords.longitude;
+                    var mapsLink = "https://google.com" + lat + "," + lon;
                     
                     document.getElementById('location-status').innerText = "📡 Location Secured!";
-                    document.getElementById('location-status').className = "text-xs text-green-400 font-medium";
+                    document.getElementById('location-status').style.color = "#4ade80";
 
-                    // Formats a direct SMS text message link
-                    const smsMessage = `EMERGENCY! I am in danger and need immediate help. Track my live location here: ${mapsLink}`;
-                    const smsUrl = `sms:?body=${encodeURIComponent(smsMessage)}`;
+                    var smsMessage = "EMERGENCY! I am in danger and need immediate help. Track my live location here: " + mapsLink;
+                    var smsUrl = "sms:?body=" + encodeURIComponent(smsMessage);
                     
-                    alert("SOS Triggered successfully! Opening your phone's messaging application to dispatch the location alert.");
+                    alert("SOS Triggered! Opening your phone's SMS app to send your location.");
                     window.location.href = smsUrl;
                 },
-                (error) => {
-                    alert("Unable to retrieve GPS coordinates. Please check your phone location permission toggles.");
+                function(error) {
+                    alert("Unable to retrieve GPS coordinates. Please enable your phone's location/GPS settings.");
                     document.getElementById('location-status').innerText = "❌ GPS Signal Failed";
                 }
             );
