@@ -1,100 +1,132 @@
-<!-- Main Application Window Wrapper -->
-<div id="appContainer" style="background-color: #1a2230; padding: 25px; border-radius: 16px; font-family: sans-serif; color: white; max-width: 400px; margin: auto; box-shadow: 0 4px 30px rgba(0,0,0,0.3); text-align: center;">
-    
-    <!-- TRIAL BADGE INDICATOR -->
-    <div id="trialBadge" style="background-color: #3b82f6; color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; margin-bottom: 15px;">
-        Calculating Trial Status...
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- CRITICAL: This invisible line forces the app to look big and normal on your phone screen -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select: none;">
+    <meta charset="UTF-8">
+    <title>SafeTap App</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #111827; min-height: 100vh; display: flex; flex-direction: column;">
+
+    <!-- MAIN APP WRAPPER: Now fills 100% of your screen width -->
+    <div id="appContainer" style="background-color: #1a2230; padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-family: sans-serif; color: white; box-sizing: border-box;">
+        
+        <!-- TOP SECTION: BADGE AND TITLE -->
+        <div>
+            <div id="trialBadge" style="background-color: #10b981; color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; margin: 10px auto 20px auto;">
+                ⏳ 7 Days Free Trial Left
+            </div>
+
+            <div id="dashboardContent" style="width: 100%;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 5px;">
+                    <span style="font-size: 24px;">🛡️</span>
+                    <h2 style="margin: 0; font-size: 22px; letter-spacing: 0.5px;">SafeTap Dashboard</h2>
+                </div>
+                
+                <!-- FULL SCREEN CENTERED SOS TRIGGER -->
+                <div style="position: relative; width: 240px; height: 240px; margin: 40px auto;">
+                    <div id="glowRing" style="position: absolute; top:0; left:0; right:0; bottom:0; border-radius: 50%; background-color: rgba(239, 68, 68, 0.2); transform: scale(1); transition: all 0.3s ease;"></div>
+                    <button id="sosButton" style="position: absolute; top:10px; left:10px; width: 220px; height: 220px; border-radius: 50%; background-color: #ef4444; color: white; font-size: 24px; font-weight: 900; border: none; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.5); -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;">
+                        TAP & HOLD SOS
+                    </button>
+                </div>
+                
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 25px;">
+                    <span id="statusDot" style="width: 10px; height: 10px; background-color: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #10b981;"></span>
+                    <p id="statusText" style="color: #60a5fa; margin: 0; font-size: 14px; font-weight: 600;">📡 GPS Signal Ready</p>
+                </div>
+            </div>
+
+            <!-- PAYWALL CONTAINER (Hidden automatically until 7 days expire) -->
+            <div id="paywallContent" style="display: none; padding: 40px 10px; text-align: center;">
+                <span style="font-size: 56px;">🔒</span>
+                <h2 style="color: #ef4444; margin-top: 15px;">Trial Expired</h2>
+                <p style="color: #9ca3af; font-size: 16px; line-height: 1.6;">Your 7-day free trial has ended. Upgrade to Premium to keep your family safety net active.</p>
+                
+                <div style="background-color: #111827; padding: 20px; border-radius: 12px; margin: 30px 0; border: 1px solid #374151;">
+                    <p style="margin: 0; color: #9ca3af; font-size: 14px;">Premium Plan Access</p>
+                    <p style="margin: 8px 0 0 0; color: white; font-size: 28px; font-weight: bold;">₦2,500 <span style="font-size: 14px; color: #9ca3af; font-weight: normal;">/ monthly</span></p>
+                </div>
+
+                <a href="https://paystack.com" target="_blank" style="text-decoration: none;">
+                    <button style="width: 100%; padding: 16px; background-color: #ef4444; color: white; font-size: 18px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);">
+                        Subscribe via Paystack
+                    </button>
+                </a>
+            </div>
+        </div>
+
+        <!-- BOTTOM SECTION: FOUNDER'S STORY -->
+        <div style="padding-top: 20px; border-top: 1px solid #1f2937; text-align: left; margin-top: 30px; padding-bottom: 10px;">
+            <p style="font-size: 11px; color: #6b7280; font-weight: bold; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px;">Our Mission</p>
+            <p style="font-size: 12px; color: #9ca3af; line-height: 1.5; font-style: italic; margin: 0;">
+                "SafeTap is not: 'An emergency app with GPS.' It's: 'A Nigerian father trying to give families one-tap access to help in a country where too many people feel unsafe.'"
+            </p>
+        </div>
+
     </div>
 
-    <!-- MAIN DASHBOARD CONTENT (Locked when trial expires) -->
-    <div id="dashboardContent">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 5px;">
-            <span style="font-size: 24px;">🛡️</span>
-            <h2 style="margin: 0; font-size: 22px; letter-spacing: 0.5px;">SafeTap Dashboard</h2>
-        </div>
-        
-        <!-- Interactive SOS Core Trigger -->
-        <div style="position: relative; width: 220px; height: 220px; margin: 25px auto;">
-            <div id="glowRing" style="position: absolute; top:0; left:0; right:0; bottom:0; border-radius: 50%; background-color: rgba(239, 68, 68, 0.2); transform: scale(1); transition: all 0.3s ease;"></div>
-            <button id="sosButton" style="position: absolute; top:10px; left:10px; width: 200px; height: 200px; border-radius: 50%; background-color: #ef4444; color: white; font-size: 22px; font-weight: 900; border: none; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.5); user-select: none;">
-                TAP & HOLD SOS
-            </button>
-        </div>
-        
-        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px;">
-            <span id="statusDot" style="width: 10px; height: 10px; background-color: #10b981; border-radius: 50%; display: inline-block;"></span>
-            <p id="statusText" style="color: #60a5fa; margin: 0; font-size: 14px; font-weight: 600;">📡 GPS Signal Ready</p>
-        </div>
-    </div>
+    <!-- TOUCH LOGIC ENGINE -->
+    <script>
+        let pressTimer;
+        let isSOSActive = false;
+        const sosButton = document.getElementById('sosButton');
+        const statusText = document.getElementById('statusText');
+        const statusDot = document.getElementById('statusDot');
+        const glowRing = document.getElementById('glowRing');
 
-    <!-- PAYWALL SCREEN (Hidden by default, shows up after 7 days) -->
-    <div id="paywallContent" style="display: none; padding: 20px 10px;">
-        <span style="font-size: 48px;">🔒</span>
-        <h2 style="color: #ef4444; margin-top: 10px;">Trial Expired</h2>
-        <p style="color: #9ca3af; font-size: 15px; line-height: 1.5;">Your 7-day free trial has ended. Upgrade to Premium to keep your family safety net active.</p>
-        
-        <div style="background-color: #111827; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #374151;">
-            <p style="margin: 0; color: #9ca3af; font-size: 13px;">Premium Plan Access</p>
-            <p style="margin: 5px 0 0 0; color: white; font-size: 24px; font-weight: bold;">₦2,500 <span style="font-size: 14px; color: #9ca3af; font-weight: normal;">/ monthly</span></p>
-        </div>
+        // Setup touch events securely for your Android phone touch screen
+        sosButton.addEventListener('touchstart', startPress, { passive: false });
+        sosButton.addEventListener('touchend', cancelPress);
+        sosButton.addEventListener('mousedown', startPress);
+        sosButton.addEventListener('mouseup', cancelPress);
 
-        <a href="https://paystack.com" target="_blank" style="text-decoration: none;">
-            <button style="width: 100%; padding: 15px; background-color: #ef4444; color: white; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);">
-                Subscribe via Paystack
-            </button>
-        </a>
-    </div>
-
-    <!-- EXTRACTED FOUNDER'S STORY PANEL -->
-    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #1f2937; text-align: left;">
-        <p style="font-size: 11px; color: #6b7280; font-weight: bold; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px;">Our Mission</p>
-        <p style="font-size: 12px; color: #9ca3af; line-height: 1.5; font-style: italic; margin: 0;">
-            "SafeTapap is not: 'An emergency app with GPS.' It's: 'A Nigerian father trying to give families one-tap access to help in a country where too many people feel unsafe.'"
-        </p>
-    </div>
-</div>
-
-<script>
-    // 2. TRIAL ENFORCEMENT ENGINE
-    window.addEventListener('DOMContentLoaded', () => {
-        manageUserTrialLifecycle();
-    });
-
-    function manageUserTrialLifecycle() {
-        const trialKey = 'safetap_registration_date';
-        const dashboard = document.getElementById('dashboardContent');
-        const paywall = document.getElementById('paywallContent');
-        const badge = document.getElementById('trialBadge');
-        
-        let registrationDate = localStorage.getItem(trialKey);
-        
-        // If this is a completely brand new user, set their start timestamp right now
-        if (!registrationDate) {
-            registrationDate = new Date().toISOString();
-            localStorage.setItem(trialKey, registrationDate);
+        function startPress(e) {
+            if(isSOSActive) return;
+            e.preventDefault(); // Prevents your phone from zooming or highlighting when held down
+            
+            let secondsLeft = 3;
+            sosButton.innerText = `HOLD ${secondsLeft}s`;
+            sosButton.style.transform = "scale(0.92)";
+            glowRing.style.transform = "scale(1.2)";
+            glowRing.style.backgroundColor = "rgba(239, 68, 68, 0.4)";
+            
+            pressTimer = setInterval(() => {
+                secondsLeft--;
+                if (secondsLeft <= 0) {
+                    clearInterval(pressTimer);
+                    triggerEmergencySOS();
+                } else {
+                    sosButton.innerText = `HOLD ${secondsLeft}s`;
+                }
+            }, 1000);
         }
-        
-        // Calculate remaining time
-        const start = new Date(registrationDate);
-        const now = new Date();
-        const differenceInTime = now.getTime() - start.getTime();
-        const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-        const daysRemaining = Math.ceil(7 - differenceInDays);
-        
-        if (daysRemaining <= 0) {
-            // Trial has run out: Swap screens out instantly
-            dashboard.style.display = 'none';
-            paywall.style.display = 'block';
-            badge.style.backgroundColor = '#ef4444';
-            badge.innerText = '🔒 Plan Expired';
-        } else {
-            // Trial active: Keep system fully operational
-            dashboard.style.display = 'block';
-            paywall.style.display = 'none';
-            badge.style.backgroundColor = '#10b981';
-            badge.innerText = `⏳ ${daysRemaining} Days Free Trial Left`;
-        }
-    }
 
-    // Keep all your original background SOS tracking scripts running right here below...
-</script>
+        function cancelPress() {
+            if (isSOSActive) return;
+            clearInterval(pressTimer);
+            sosButton.innerText = "TAP & HOLD SOS";
+            sosButton.style.transform = "scale(1)";
+            glowRing.style.transform = "scale(1)";
+            glowRing.style.backgroundColor = "rgba(239, 68, 68, 0.2)";
+        }
+
+        function triggerEmergencySOS() {
+            isSOSActive = true;
+            sosButton.style.backgroundColor = "#111827";
+            sosButton.style.borderColor = "#ef4444";
+            sosButton.style.borderWidth = "2px";
+            sosButton.style.borderStyle = "solid";
+            sosButton.innerText = "🚨 LIVE";
+            
+            statusDot.style.backgroundColor = "#ef4444";
+            statusDot.style.boxShadow = "0 0 10px #ef4444";
+            statusText.style.color = "#ef4444";
+            statusText.innerText = "SOS ACTIVATED. TRACKING ENGINE ON.";
+            
+            // Fires an actual physical buzz on your itel phone
+            if (navigator.vibrate) navigator.vibrate(500);
+        }
+    </script>
+</body>
+</html>
