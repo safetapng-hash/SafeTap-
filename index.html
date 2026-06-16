@@ -1,132 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- CRITICAL: This invisible line forces the app to look big and normal on your phone screen -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select: none;">
     <meta charset="UTF-8">
     <title>SafeTap App</title>
 </head>
-<body style="margin: 0; padding: 0; background-color: #111827; min-height: 100vh; display: flex; flex-direction: column;">
+<body style="margin: 0; padding: 0; background-color: #111827; min-height: 100vh; display: flex; flex-direction: column; font-family: sans-serif; color: white;">
 
-    <!-- MAIN APP WRAPPER: Now fills 100% of your screen width -->
-    <div id="appContainer" style="background-color: #1a2230; padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-family: sans-serif; color: white; box-sizing: border-box;">
-        
-        <!-- TOP SECTION: BADGE AND TITLE -->
+    <!-- 1. AUTHENTICATION MODULE (LOGIN / REGISTRATION GATEWAY) -->
+    <div id="authScreen" style="background-color: #1a2230; padding: 25px; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box;">
         <div>
-            <div id="trialBadge" style="background-color: #10b981; color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; margin: 10px auto 20px auto;">
-                ⏳ 7 Days Free Trial Left
+            <div style="text-align: center; margin-top: 30px; margin-bottom: 30px;">
+                <span style="font-size: 50px;">🛡️</span>
+                <h1 style="margin: 10px 0 5px 0; font-size: 28px; font-weight: 800; letter-spacing: 0.5px;">SafeTap</h1>
+                <p style="margin: 0; color: #9ca3af; font-size: 14px;">Personal Safety Monitoring App</p>
             </div>
 
-            <div id="dashboardContent" style="width: 100%;">
-                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 5px;">
-                    <span style="font-size: 24px;">🛡️</span>
-                    <h2 style="margin: 0; font-size: 22px; letter-spacing: 0.5px;">SafeTap Dashboard</h2>
-                </div>
-                
-                <!-- FULL SCREEN CENTERED SOS TRIGGER -->
-                <div style="position: relative; width: 240px; height: 240px; margin: 40px auto;">
-                    <div id="glowRing" style="position: absolute; top:0; left:0; right:0; bottom:0; border-radius: 50%; background-color: rgba(239, 68, 68, 0.2); transform: scale(1); transition: all 0.3s ease;"></div>
-                    <button id="sosButton" style="position: absolute; top:10px; left:10px; width: 220px; height: 220px; border-radius: 50%; background-color: #ef4444; color: white; font-size: 24px; font-weight: 900; border: none; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.5); -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;">
-                        TAP & HOLD SOS
-                    </button>
-                </div>
-                
-                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 25px;">
-                    <span id="statusDot" style="width: 10px; height: 10px; background-color: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #10b981;"></span>
-                    <p id="statusText" style="color: #60a5fa; margin: 0; font-size: 14px; font-weight: 600;">📡 GPS Signal Ready</p>
-                </div>
+            <!-- Login / Signup Mode Toggle Panel -->
+            <div style="display: flex; background-color: #111827; padding: 4px; border-radius: 8px; margin-bottom: 25px;">
+                <button id="toggleLoginBtn" style="flex: 1; padding: 10px; background-color: #3b82f6; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px;">Log In</button>
+                <button id="toggleRegisterBtn" style="flex: 1; padding: 10px; background-color: transparent; color: #9ca3af; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px;">Register</button>
             </div>
 
-            <!-- PAYWALL CONTAINER (Hidden automatically until 7 days expire) -->
-            <div id="paywallContent" style="display: none; padding: 40px 10px; text-align: center;">
-                <span style="font-size: 56px;">🔒</span>
-                <h2 style="color: #ef4444; margin-top: 15px;">Trial Expired</h2>
-                <p style="color: #9ca3af; font-size: 16px; line-height: 1.6;">Your 7-day free trial has ended. Upgrade to Premium to keep your family safety net active.</p>
-                
-                <div style="background-color: #111827; padding: 20px; border-radius: 12px; margin: 30px 0; border: 1px solid #374151;">
-                    <p style="margin: 0; color: #9ca3af; font-size: 14px;">Premium Plan Access</p>
-                    <p style="margin: 8px 0 0 0; color: white; font-size: 28px; font-weight: bold;">₦2,500 <span style="font-size: 14px; color: #9ca3af; font-weight: normal;">/ monthly</span></p>
-                </div>
-
-                <a href="https://paystack.com" target="_blank" style="text-decoration: none;">
-                    <button style="width: 100%; padding: 16px; background-color: #ef4444; color: white; font-size: 18px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);">
-                        Subscribe via Paystack
-                    </button>
-                </a>
-            </div>
+            <!-- Context Input Fields -->
+            <h3 id="authTitle" style="margin-top: 0; font-size: 18px; margin-bottom: 15px;">Welcome Back</h3>
+            <input type="email" id="authEmail" placeholder="Enter Your Email" style="width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #374151; background-color: #111827; color: white; box-sizing: border-box; font-size: 14px;">
+            <input type="password" id="authPassword" placeholder="Enter Secure Password" style="width: 100%; padding: 14px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #374151; background-color: #111827; color: white; box-sizing: border-box; font-size: 14px;">
+            
+            <button id="submitAuthBtn" style="width: 100%; padding: 14px; background-color: #ef4444; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">Access My Dashboard</button>
         </div>
 
-        <!-- BOTTOM SECTION: FOUNDER'S STORY -->
-        <div style="padding-top: 20px; border-top: 1px solid #1f2937; text-align: left; margin-top: 30px; padding-bottom: 10px;">
-            <p style="font-size: 11px; color: #6b7280; font-weight: bold; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px;">Our Mission</p>
-            <p style="font-size: 12px; color: #9ca3af; line-height: 1.5; font-style: italic; margin: 0;">
+        <!-- AUTHENTICATION FOOTER MISSION DISPLAY -->
+        <div style="padding-top: 15px; border-top: 1px solid #374151; text-align: left; margin-top: 30px;">
+            <p style="font-size: 10px; color: #6b7280; font-weight: bold; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px;">Our Mission</p>
+            <p style="font-size: 11px; color: #9ca3af; line-height: 1.4; font-style: italic; margin: 0;">
                 "SafeTap is not: 'An emergency app with GPS.' It's: 'A Nigerian father trying to give families one-tap access to help in a country where too many people feel unsafe.'"
             </p>
         </div>
-
     </div>
+⁹⁰
 
-    <!-- TOUCH LOGIC ENGINE -->
-    <script>
-        let pressTimer;
-        let isSOSActive = false;
-        const sosButton = document.getElementById('sosButton');
-        const statusText = document.getElementById('statusText');
-        const statusDot = document.getElementById('statusDot');
-        const glowRing = document.getElementById('glowRing');
+    <!-- 2. MAIN APPLICATION LAYER CONTAINER (Hidden until authentication completes) -->
+    <div id="appContainer" style="display: none; background-color: #1a2230; padding: 20px; min-height: 100vh; flex-direction: column; justify-content: space-between; box-sizing: border-box; position: relative;">
+        
+        <!-- HEADER INTERFACE BANNER -->
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+            <div id="trialBadge" style="background-color: #10b981; color: white; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: bold;">
+                ⏳ 7 Days Free Trial Left
+            </div>
+            <button id="openSettingsBtn" style="background: #374151; color: #60a5fa; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;">
+                👤 Contacts Settings
+            </button>
+        </div>
 
-        // Setup touch events securely for your Android phone touch screen
-        sosButton.addEventListener('touchstart', startPress, { passive: false });
-        sosButton.addEventListener('touchend', cancelPress);
-        sosButton.addEventListener('mousedown', startPress);
-        sosButton.addEventListener('mouseup', cancelPress);
-
-        function startPress(e) {
-            if(isSOSActive) return;
-            e.preventDefault(); // Prevents your phone from zooming or highlighting when held down
+        <!-- DASHBOARD UI SYSTEM -->
+        <div id="dashboardContent" style="width: 100%; margin-top: 10px;">
+            <div style="text-align: center; margin-bottom: 5px;">
+                <span style="font-size: 24px;">🛡️</span>
+                <h2 style="margin: 0; display: inline-block; font-size: 22px; letter-spacing: 0.5px; vertical-align: middle;">SafeTap Dashboard</h2>
+                <p id="userWelcomeText" style="margin: 5px 0 0 0; font-size: 12px; color: #9ca3af;"></p>
+            </div>
             
-            let secondsLeft = 3;
-            sosButton.innerText = `HOLD ${secondsLeft}s`;
-            sosButton.style.transform = "scale(0.92)";
-            glowRing.style.transform = "scale(1.2)";
-            glowRing.style.backgroundColor = "rgba(239, 68, 68, 0.4)";
+            <!-- Core Interactive Trigger Matrix -->
+            <div style="position: relative; width: 230px; height: 230px; margin: 30px auto;">
+                <div id="glowRing" style="position: absolute; top:0; left:0; right:0; bottom:0; border-radius: 50%; background-color: rgba(239, 68, 68, 0.2); transform: scale(1); transition: all 0.3s ease;"></div>
+                <button id="sosButton" style="position: absolute; top:10px; left:10px; width: 210px; height: 210px; border-radius: 50%; background-color: #ef4444; color: white; font-size: 22px; font-weight: 900; border: none; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.5); user-select: none;">
+                    TAP & HOLD SOS
+                </button>
+            </div>
             
-            pressTimer = setInterval(() => {
-                secondsLeft--;
-                if (secondsLeft <= 0) {
-                    clearInterval(pressTimer);
-                    triggerEmergencySOS();
-                } else {
-                    sosButton.innerText = `HOLD ${secondsLeft}s`;
-                }
-            }, 1000);
-        }
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px;">
+                <span id="statusDot" style="width: 10px; height: 10px; background-color: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #10b981;"></span>
+                <p id="statusText" style="color: #60a5fa; margin: 0; font-size: 13px; font-weight: 600;">📡 GPS Signal Ready</p>
+            </div>
 
-        function cancelPress() {
-            if (isSOSActive) return;
-            clearInterval(pressTimer);
-            sosButton.innerText = "TAP & HOLD SOS";
-            sosButton.style.transform = "scale(1)";
-            glowRing.style.transform = "scale(1)";
-            glowRing.style.backgroundColor = "rgba(239, 68, 68, 0.2)";
-        }
+            <button id="logoutBtn" style="background: transparent; color: #9ca3af; border: none; text-decoration: underline; margin-top: 20px; font-size: 12px; cursor: pointer; width: 100%;">Sign Out Account</button>
+        </div>
 
-        function triggerEmergencySOS() {
-            isSOSActive = true;
-            sosButton.style.backgroundColor = "#111827";
-            sosButton.style.borderColor = "#ef4444";
-            sosButton.style.borderWidth = "2px";
-            sosButton.style.borderStyle = "solid";
-            sosButton.innerText = "🚨 LIVE";
+        <!-- CONTACT REGISTRATION SECTION SHEET -->
+        <div id="settingsDrawer" style="display: none; background-color: #111827; border: 1px solid #374151; padding: 20px; border-radius: 16px; margin-top: 20px; text-align: left; box-sizing: border-box;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0; font-size: 16px; color: #f3f4f6; font-weight: bold;">Register 3 Trusted Responders</h3>
+                <button id="closeSettingsBtn" style="background: transparent; color: #ef4444; border: none; font-size: 14px; font-weight: bold; cursor: pointer;">Close</button>
+            </div>
             
-            statusDot.style.backgroundColor = "#ef4444";
-            statusDot.style.boxShadow = "0 0 10px #ef4444";
-            statusText.style.color = "#ef4444";
-            statusText.innerText = "SOS ACTIVATED. TRACKING ENGINE ON.";
+            <input type="tel" id="contact1" placeholder="🚨 Primary Contact Number" style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #4b5563; background-color: #1f2937; color: white; box-sizing: border-box; font-size: 14px;">
+            <input type="tel" id="contact2" placeholder="👤 Backup Contact Number 2" style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #4b5563; background-color: #1f2937; color: white; box-sizing: border-box; font-size: 14px;">
+            <input type="tel" id="contact3" placeholder="👤 Backup Contact Number 3" style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 6px; border: 1px solid #4b5563; background-color: #1f2937; color: white; box-sizing: border-box; font-size: 14px;">
             
-            // Fires an actual physical buzz on your itel phone
-            if (navigator.vibrate) navigator.vibrate(500);
-        }
-    </script>
-</body>
-</html>
+            <button id="saveContactsBtn" style="width: 100%; padding: 14px; background-color: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px;">Save Contact Database</button>
+        </div>
+
+        <!-- TRIAL END EXPIRED SCREEN GATE -->
+        <div id="paywallContent" style="display: none; padding: 40px 10px; text-align: center;">
+            <span style="font-size: 56px;">🔒</span>
+            <h2 style="color: #ef4444; margin-top: 15px;">Trial Expired</h2>
+            <p style="color: #9ca3af; font-size: 16px; line-height: 1.6;">Your 7-day free trial has ended. Upgrade to Premium to keep your family safety net active.</p>
+            <div style="background-color: #111827; padding: 20px; border-radius: 12px; margin: 30px 0; border: 1px solid #374151;">
+                <p style="margin: 0; color: #9ca3af; font-size: 14px;">Premium Plan Access</p>
+                <p style="margin: 8px 0 0 0; color: white; font-size: 28px; font-weight: bold;">₦2,500 <span style="font-size: 14px; color: #9ca3af; font-weight: normal;">/ monthly</span></p>
+            </div>
+            <a href="https://paystack.com" target="_blank" style="text-decoration: none;">
+                <button style="width: 100%; padding: 16px; background-color: #ef4444; color: white; font-size: 18px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer;">Subscribe via Paystack</button>
+            </a>
+        </div>
+
+        <!-- SYSTEM APPLICATION FOOTER MISSION VIEW -->
+        <div id="missionFooter" style="padding-top: 15px; border-top: 1px solid #1f2937; text-align: left; margin-top: 25px;">
+            <p style="font-size: 10px; color: #6b7280; font-weight: bold; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px;">Our Mission</p>
+            <p style="font-size: 11px; color: #9ca3af; line-height: 1.4; font-style: italic; margin: 0;">
+                "SafeTap is not: 'An emergency app with GPS.' It's: 'A Nigerian father trying to give families one-tap access to help in a country where too many people feel unsafe.'"
+            </p>
