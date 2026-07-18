@@ -25,8 +25,11 @@
             <!-- Context Input Fields -->
             <h3 id="authTitle" style="margin-top: 0; font-size: 18px; margin-bottom: 15px;">Welcome Back</h3>
             <input type="email" id="authEmail" placeholder="Enter Your Email" style="width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #374151; background-color: #111827; color: white; box-sizing: border-box; font-size: 14px;">
-            <input type="password" id="authPassword" placeholder="Enter Secure Password" style="width: 100%; padding: 14px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #374151; background-color: #111827; color: white; box-sizing: border-box; font-size: 14px;">
-            
+            <input type="password" id="authPassword" placeholder="Enter Secure Password" style="width: 100%; padding: 14px; margin-bottom: 8px; border-radius: 8px; border: 1px solid #374151; background-color: #111827; color: white; box-sizing: border-box; font-size: 14px;">
+
+            <!-- Error/status message shows here -->
+            <p id="authMessage" style="color: #ef4444; font-size: 13px; min-height: 18px; margin: 0 0 12px 0;"></p>
+
             <button id="submitAuthBtn" style="width: 100%; padding: 14px; background-color: #ef4444; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);">Access My Dashboard</button>
         </div>
 
@@ -38,11 +41,10 @@
             </p>
         </div>
     </div>
-⁹⁰
 
     <!-- 2. MAIN APPLICATION LAYER CONTAINER (Hidden until authentication completes) -->
     <div id="appContainer" style="display: none; background-color: #1a2230; padding: 20px; min-height: 100vh; flex-direction: column; justify-content: space-between; box-sizing: border-box; position: relative;">
-        
+
         <!-- HEADER INTERFACE BANNER -->
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
             <div id="trialBadge" style="background-color: #10b981; color: white; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: bold;">
@@ -60,7 +62,7 @@
                 <h2 style="margin: 0; display: inline-block; font-size: 22px; letter-spacing: 0.5px; vertical-align: middle;">SafeTap Dashboard</h2>
                 <p id="userWelcomeText" style="margin: 5px 0 0 0; font-size: 12px; color: #9ca3af;"></p>
             </div>
-            
+
             <!-- Core Interactive Trigger Matrix -->
             <div style="position: relative; width: 230px; height: 230px; margin: 30px auto;">
                 <div id="glowRing" style="position: absolute; top:0; left:0; right:0; bottom:0; border-radius: 50%; background-color: rgba(239, 68, 68, 0.2); transform: scale(1); transition: all 0.3s ease;"></div>
@@ -68,7 +70,7 @@
                     TAP & HOLD SOS
                 </button>
             </div>
-            
+
             <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px;">
                 <span id="statusDot" style="width: 10px; height: 10px; background-color: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #10b981;"></span>
                 <p id="statusText" style="color: #60a5fa; margin: 0; font-size: 13px; font-weight: 600;">📡 GPS Signal Ready</p>
@@ -83,11 +85,13 @@
                 <h3 style="margin: 0; font-size: 16px; color: #f3f4f6; font-weight: bold;">Register 3 Trusted Responders</h3>
                 <button id="closeSettingsBtn" style="background: transparent; color: #ef4444; border: none; font-size: 14px; font-weight: bold; cursor: pointer;">Close</button>
             </div>
-            
+
             <input type="tel" id="contact1" placeholder="🚨 Primary Contact Number" style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #4b5563; background-color: #1f2937; color: white; box-sizing: border-box; font-size: 14px;">
             <input type="tel" id="contact2" placeholder="👤 Backup Contact Number 2" style="width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #4b5563; background-color: #1f2937; color: white; box-sizing: border-box; font-size: 14px;">
-            <input type="tel" id="contact3" placeholder="👤 Backup Contact Number 3" style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 6px; border: 1px solid #4b5563; background-color: #1f2937; color: white; box-sizing: border-box; font-size: 14px;">
-            
+            <input type="tel" id="contact3" placeholder="👤 Backup Contact Number 3" style="width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 6px; border: 1px solid #4b5563; background-color: #1f2937; color: white; box-sizing: border-box; font-size: 14px;">
+
+            <p id="contactsMessage" style="color: #10b981; font-size: 12px; min-height: 16px; margin: 0 0 12px 0;"></p>
+
             <button id="saveContactsBtn" style="width: 100%; padding: 14px; background-color: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px;">Save Contact Database</button>
         </div>
 
@@ -111,3 +115,281 @@
             <p style="font-size: 11px; color: #9ca3af; line-height: 1.4; font-style: italic; margin: 0;">
                 "SafeTap is not: 'An emergency app with GPS.' It's: 'A Nigerian father trying to give families one-tap access to help in a country where too many people feel unsafe.'"
             </p>
+        </div>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- FIREBASE CONNECTION CODE STARTS HERE -->
+    <!-- ============================================= -->
+    <script type="module">
+        // --- Import the Firebase tools we need ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+        import {
+            getFirestore,
+            doc,
+            setDoc,
+            getDoc,
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+        // --- Your SafeTap Firebase project keys ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDn9cYgR3jvuGTvbfD3U1pr7Au9t_Twhz8",
+            authDomain: "studio-1824171441-78fc0.firebaseapp.com",
+            projectId: "studio-1824171441-78fc0",
+            storageBucket: "studio-1824171441-78fc0.firebasestorage.app",
+            messagingSenderId: "617219655919",
+            appId: "1:617219655919:web:331cf21e5a0565ad21b31a"
+        };
+
+        // --- Start up Firebase, Authentication, and the Database ---
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- Grab every button/input we need to control ---
+        const authScreen = document.getElementById('authScreen');
+        const appContainer = document.getElementById('appContainer');
+        const toggleLoginBtn = document.getElementById('toggleLoginBtn');
+        const toggleRegisterBtn = document.getElementById('toggleRegisterBtn');
+        const authTitle = document.getElementById('authTitle');
+        const submitAuthBtn = document.getElementById('submitAuthBtn');
+        const authEmail = document.getElementById('authEmail');
+        const authPassword = document.getElementById('authPassword');
+        const authMessage = document.getElementById('authMessage');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userWelcomeText = document.getElementById('userWelcomeText');
+        const trialBadge = document.getElementById('trialBadge');
+        const dashboardContent = document.getElementById('dashboardContent');
+        const paywallContent = document.getElementById('paywallContent');
+        const openSettingsBtn = document.getElementById('openSettingsBtn');
+        const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+        const settingsDrawer = document.getElementById('settingsDrawer');
+        const saveContactsBtn = document.getElementById('saveContactsBtn');
+        const contact1 = document.getElementById('contact1');
+        const contact2 = document.getElementById('contact2');
+        const contact3 = document.getElementById('contact3');
+        const contactsMessage = document.getElementById('contactsMessage');
+        const sosButton = document.getElementById('sosButton');
+        const statusText = document.getElementById('statusText');
+        const statusDot = document.getElementById('statusDot');
+
+        // Tracks whether the Log In or Register tab is currently selected
+        let isRegisterMode = false;
+
+        // --- Switching between Log In and Register tabs ---
+        toggleLoginBtn.addEventListener('click', () => {
+            isRegisterMode = false;
+            toggleLoginBtn.style.backgroundColor = '#3b82f6';
+            toggleLoginBtn.style.color = 'white';
+            toggleRegisterBtn.style.backgroundColor = 'transparent';
+            toggleRegisterBtn.style.color = '#9ca3af';
+            authTitle.textContent = 'Welcome Back';
+            authMessage.textContent = '';
+        });
+
+        toggleRegisterBtn.addEventListener('click', () => {
+            isRegisterMode = true;
+            toggleRegisterBtn.style.backgroundColor = '#3b82f6';
+            toggleRegisterBtn.style.color = 'white';
+            toggleLoginBtn.style.backgroundColor = 'transparent';
+            toggleLoginBtn.style.color = '#9ca3af';
+            authTitle.textContent = 'Create Your Account';
+            authMessage.textContent = '';
+        });
+
+        // --- What happens when "Access My Dashboard" is tapped ---
+        submitAuthBtn.addEventListener('click', async () => {
+            const email = authEmail.value.trim();
+            const password = authPassword.value;
+            authMessage.style.color = '#ef4444';
+            authMessage.textContent = '';
+
+            if (!email || !password) {
+                authMessage.textContent = 'Please enter both email and password.';
+                return;
+            }
+
+            submitAuthBtn.textContent = 'Please wait...';
+            submitAuthBtn.disabled = true;
+
+            try {
+                if (isRegisterMode) {
+                    // Create a brand new account
+                    const result = await createUserWithEmailAndPassword(auth, email, password);
+                    // Save the exact moment they signed up, so we can calculate the 7-day trial later
+                    await setDoc(doc(db, 'users', result.user.uid), {
+                        email: email,
+                        createdAt: serverTimestamp()
+                    });
+                } else {
+                    // Log into an existing account
+                    await signInWithEmailAndPassword(auth, email, password);
+                }
+                // onAuthStateChanged (below) will automatically handle showing the dashboard
+            } catch (error) {
+                authMessage.textContent = friendlyErrorMessage(error.code);
+            } finally {
+                submitAuthBtn.textContent = 'Access My Dashboard';
+                submitAuthBtn.disabled = false;
+            }
+        });
+
+        // --- Turns Firebase's technical error codes into plain English ---
+        function friendlyErrorMessage(code) {
+            switch (code) {
+                case 'auth/email-already-in-use':
+                    return 'That email already has an account. Try logging in instead.';
+                case 'auth/invalid-email':
+                    return 'That email address looks incorrect.';
+                case 'auth/weak-password':
+                    return 'Password should be at least 6 characters.';
+                case 'auth/invalid-credential':
+                case 'auth/wrong-password':
+                case 'auth/user-not-found':
+                    return 'Incorrect email or password.';
+                default:
+                    return 'Something went wrong. Please try again.';
+            }
+        }
+
+        // --- Sign Out ---
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth);
+        });
+
+        // --- This runs automatically whenever someone logs in, registers, or reopens the app ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Logged in: hide the login screen, show the app
+                authScreen.style.display = 'none';
+                appContainer.style.display = 'flex';
+                userWelcomeText.textContent = user.email;
+
+                // Look up their account info (including sign-up date, for the trial)
+                const userDocRef = doc(db, 'users', user.uid);
+                const userDocSnap = await getDoc(userDocRef);
+
+                if (userDocSnap.exists()) {
+                    const userData = userDocSnap.data();
+
+                    // Load any previously saved emergency contacts
+                    if (userData.contacts) {
+                        contact1.value = userData.contacts.contact1 || '';
+                        contact2.value = userData.contacts.contact2 || '';
+                        contact3.value = userData.contacts.contact3 || '';
+                    }
+
+                    // Work out how many trial days are left
+                    if (userData.createdAt) {
+                        const createdDate = userData.createdAt.toDate();
+                        const now = new Date();
+                        const daysUsed = Math.floor((now - createdDate) / (1000 * 60 * 60 * 24));
+                        const daysLeft = 7 - daysUsed;
+
+                        if (daysLeft > 0) {
+                            trialBadge.textContent = '⏳ ' + daysLeft + ' Day' + (daysLeft === 1 ? '' : 's') + ' Free Trial Left';
+                            dashboardContent.style.display = 'block';
+                            paywallContent.style.display = 'none';
+                        } else {
+                            // Trial has run out — show the paywall instead of the dashboard
+                            dashboardContent.style.display = 'none';
+                            paywallContent.style.display = 'block';
+                        }
+                    }
+                }
+            } else {
+                // Logged out: show the login screen, hide the app
+                authScreen.style.display = 'flex';
+                appContainer.style.display = 'none';
+                authEmail.value = '';
+                authPassword.value = '';
+            }
+        });
+
+        // --- Opening and closing the Contacts Settings drawer ---
+        openSettingsBtn.addEventListener('click', () => {
+            settingsDrawer.style.display = settingsDrawer.style.display === 'none' ? 'block' : 'none';
+        });
+        closeSettingsBtn.addEventListener('click', () => {
+            settingsDrawer.style.display = 'none';
+        });
+
+        // --- Saving emergency contacts to the database ---
+        saveContactsBtn.addEventListener('click', async () => {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            contactsMessage.textContent = 'Saving...';
+            try {
+                await setDoc(doc(db, 'users', user.uid), {
+                    contacts: {
+                        contact1: contact1.value.trim(),
+                        contact2: contact2.value.trim(),
+                        contact3: contact3.value.trim()
+                    }
+                }, { merge: true }); // merge:true means this won't erase their email/createdAt info
+                contactsMessage.style.color = '#10b981';
+                contactsMessage.textContent = 'Contacts saved successfully.';
+            } catch (error) {
+                contactsMessage.style.color = '#ef4444';
+                contactsMessage.textContent = 'Could not save. Please try again.';
+            }
+        });
+
+        // --- THE SOS BUTTON (tap and hold gesture) ---
+        // Note: this currently captures your location and prepares the alert.
+        // Actually SENDING the SMS requires a secure backend step (Cloud Functions + Termii),
+        // which is the next stage we build after this one.
+        let holdTimer = null;
+
+        function startHold() {
+            statusText.textContent = '📍 Locating you... keep holding';
+            statusDot.style.backgroundColor = '#f59e0b';
+            holdTimer = setTimeout(triggerSOS, 1200);
+        }
+
+        function cancelHold() {
+            clearTimeout(holdTimer);
+            statusText.textContent = '📡 GPS Signal Ready';
+            statusDot.style.backgroundColor = '#10b981';
+        }
+
+        function triggerSOS() {
+            if (!navigator.geolocation) {
+                statusText.textContent = '⚠️ GPS not available on this device';
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const mapLink = 'https://maps.google.com/?q=' + lat + ',' + lng;
+                    statusText.textContent = '✅ Alert ready — location captured';
+                    statusDot.style.backgroundColor = '#ef4444';
+                    console.log('SOS triggered. Location link:', mapLink);
+                    // NEXT STAGE: this is where we will call a Cloud Function
+                    // to actually text this mapLink to the saved emergency contacts.
+                },
+                () => {
+                    statusText.textContent = '⚠️ Could not get your location. Check location permission.';
+                }
+            );
+        }
+
+        sosButton.addEventListener('mousedown', startHold);
+        sosButton.addEventListener('touchstart', (e) => { e.preventDefault(); startHold(); }, { passive: false });
+        sosButton.addEventListener('mouseup', cancelHold);
+        sosButton.addEventListener('mouseleave', cancelHold);
+        sosButton.addEventListener('touchend', cancelHold);
+    </script>
+
+</body>
+</html>
